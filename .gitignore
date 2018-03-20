@@ -1,0 +1,6 @@
+bin
+build
+*.o
+*.a
+*.so
+tests/tests.log
