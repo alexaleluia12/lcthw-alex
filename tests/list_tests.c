@@ -91,6 +91,21 @@ char *test_shift()
     return NULL;
 }
 
+// expected an erro on tests.log for this function
+char *test_check_list_assert()
+{
+    // is right if lanch a message
+    List *mylist = List_create();
+    char *v1 = "abc";
+    
+    List_push(NULL, v1);
+    mu_assert(List_count(mylist) == 0, "wrong total value on list");
+    
+    List_clear_destroy(mylist);
+    
+    return NULL;
+}
+
 char *all_tests()
 {
     mu_suite_start();
@@ -101,6 +116,8 @@ char *all_tests()
     mu_run_test(test_remove);
     mu_run_test(test_shift);
     mu_run_test(test_destroy);
+    // --
+    mu_run_test(test_check_list_assert);
     
     return NULL;
 }

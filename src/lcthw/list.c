@@ -9,6 +9,8 @@ List *List_create()
 
 void List_clear_destroy(List *list)
 {
+    check(list, "List is null");
+    
     LIST_FOREACH(list, first, next, cur) {
         free(cur->value);
         
@@ -19,10 +21,15 @@ void List_clear_destroy(List *list)
     
     free(list->last);
     free(list);
+
+error:
+    return;
 }
 
 void List_push(List *list, void *value)
 {
+    check(list, "List is null");
+    
     ListNode *node = calloc(1, sizeof(ListNode));
     check_mem(node);
     
@@ -45,12 +52,19 @@ error:
 
 void *List_pop(List *list)
 {
+    check(list, "List is null");
+    
     ListNode *node = list->last;
     return node != NULL ? List_remove(list, node) : NULL;
+
+error:
+    return;
 }
 
 void List_unshift(List *list, void *value)
 {
+    check(list, "List is null");
+    
     ListNode *node = calloc(1, sizeof(ListNode));
     check_mem(node);
     
@@ -73,12 +87,19 @@ error:
 
 void *List_shift(List *list)
 {
+    check(list, "List is null");
+    
     ListNode *node = list->first;
     return node != NULL ? List_remove(list, node) : NULL;
+
+error:
+    return;
 }
 
 void *List_remove(List *list, ListNode *node)
 {
+    check(list, "List is null");
+    
     void *result = NULL;
     
     check(list->first && list->last, "List is empty.");

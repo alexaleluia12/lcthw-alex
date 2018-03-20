@@ -4,4 +4,3 @@ build
 *.a
 *.so
 tests/tests.log
-tests/!*.*
