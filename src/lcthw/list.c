@@ -26,6 +26,11 @@ error:
     return;
 }
 
+void List_destroy(List *list)
+{
+    return List_clear_destroy(list);
+}
+
 void List_push(List *list, void *value)
 {
     check(list, "List is null");

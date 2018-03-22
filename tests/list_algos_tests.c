@@ -1,4 +1,5 @@
 #include "minunit.h"
+#include <lcthw/list.h>
 #include <lcthw/list_algos.h>
 #include <assert.h>
 #include <string.h>
@@ -21,7 +22,7 @@ List *create_words()
 
 int is_sorted(List *words)
 {
-    LIST_FOREACH(word, first, next, cur) {
+    LIST_FOREACH(words, first, next, cur) {
         if(cur->next && strcmp(cur->value, cur->next->value) > 0) {
             debug("%s %s", (char *)cur->value, (char *)cur->next->value);
             return 0;
@@ -31,7 +32,7 @@ int is_sorted(List *words)
     return 1;
 }
 
-char *test_buble_sort()
+char *test_bubble_sort()
 {
     List *words = create_words();
     
@@ -61,7 +62,7 @@ char *test_buble_sort()
 char *all_tests()
 {
     mu_suite_start();
-    mu_run_tests(test_buble_sort);
+    mu_run_test(test_bubble_sort);
     
     return NULL;
 }
