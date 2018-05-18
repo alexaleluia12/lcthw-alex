@@ -6,29 +6,40 @@ List *List_create()
     return calloc(1, sizeof(List));
 }
 
-
 void List_clear_destroy(List *list)
+{
+    List_clear(list);
+    List_destroy(list);
+
+}
+
+void List_clear(List *list)
 {
     check(list, "List is null");
     
     LIST_FOREACH(list, first, next, cur) {
         free(cur->value);
-        
-        if(cur->prev) {
-            free(cur->prev);
-        }
     }
     
-    free(list->last);
-    free(list);
-
 error:
     return;
 }
 
 void List_destroy(List *list)
 {
-    return List_clear_destroy(list);
+    check(list, "List is null");
+    
+    LIST_FOREACH(list, first, next, cur) {
+        if(cur->prev) {
+            free(cur->prev);
+        }
+    }
+
+    free(list->last);
+    free(list);
+error:
+    log_err("fail to destroy the list");
+    return;
 }
 
 void List_push(List *list, void *value)
@@ -63,7 +74,8 @@ void *List_pop(List *list)
     return node != NULL ? List_remove(list, node) : NULL;
 
 error:
-    return;
+    log_err("Fail to remove last item");
+    return NULL;
 }
 
 void List_unshift(List *list, void *value)
@@ -98,7 +110,8 @@ void *List_shift(List *list)
     return node != NULL ? List_remove(list, node) : NULL;
 
 error:
-    return;
+    log_err("Fail to remove first node");
+    return NULL;
 }
 
 void *List_remove(List *list, ListNode *node)
@@ -136,4 +149,3 @@ void *List_remove(List *list, ListNode *node)
 error:
     return result;
 }
-

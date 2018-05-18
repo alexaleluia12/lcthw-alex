@@ -24,9 +24,13 @@ void List_clear_destroy(List *list);
 #define List_first(A) ((A)->first != NULL ? A->first->value : NULL)
 #define List_last(A) ((A)->last != NULL ? A->last->value : NULL)
 
+/** Add element to end of the list */
 void List_push(List *list, void *value);
+/** Remove the last element of the list */
 void *List_pop(List *list);
+/** Add element to start of the list */
 void List_unshift(List *list, void *value);
+/** Remove the first elemento of the list */
 void *List_shift(List *list);
 
 void *List_remove(List *list, ListNode *node);

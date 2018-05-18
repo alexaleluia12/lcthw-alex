@@ -1,6 +1,7 @@
 #include "minunit.h"
 #include <lcthw/list.h>
 #include <lcthw/list_algos.h>
+#include <lcthw/dbg.h>
 #include <assert.h>
 #include <string.h>
 
@@ -44,10 +45,11 @@ char *test_bubble_sort()
     // should work on already sorted list
     rc = List_bubble_sort(words, (List_compare) strcmp);
     mu_assert(rc == 0, "Bubble sort of already sorted failed.");
-    mu_assert(is_sorted(words), "Words should be sort if already bubbble sorted.");
+    mu_assert(is_sorted(words), 
+              "Words should be sort if already bubbble sorted.");
     
     List_destroy(words);
-    
+
     // should work on empty list
     words = List_create(words);
     rc = List_bubble_sort(words, (List_compare) strcmp);

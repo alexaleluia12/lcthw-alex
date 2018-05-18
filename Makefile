@@ -1,4 +1,5 @@
-CFLAGS=-g -Wall -Wextra -Isrc -rdynamic -DNDEBUG $(OPTFLAGS)
+# add -DNDEBUG flag to CFLAGS to hide logs from dbg.h
+CFLAGS=-g -Wall -Wextra -Isrc -rdynamic $(OPTFLAGS)
 LIBS=-ldl -lm $(OPTLIBS)
 PREFIX?=/usr/local
 
