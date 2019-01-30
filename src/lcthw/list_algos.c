@@ -156,6 +156,7 @@ List *List_merge_sort(List *list, List_compare cb) {
     List *left = List_create();
     List *right = List_create();
     // split the list in left and right sublists
+    // NOTE: use just one for and not getAt
     int i = 0;
     for (i = 0; i < list_size; i++) {
         element = getAt(list, i);
@@ -167,15 +168,21 @@ List *List_merge_sort(List *list, List_compare cb) {
         }
     }
     // recursively sort the sublists
-    left = List_merge_sort(left, cb);
-    right = List_merge_sort(right, cb);
+    List *sort_left = List_merge_sort(left, cb);
+    List *sort_right = List_merge_sort(right, cb);
+    
+    // destroy old lists
+    if (left != sort_left) {
+        List_destroy(left);
+    }
+    if (right != sort_right) {
+        List_destroy(right);
+    }
     // join the two sorted sublists
-    return merge(left, right, cb);
+    return merge(sort_left, sort_right, cb);
 
 error:
     log_err("merge_sort fail");
-    List_destroy(left);
-    List_destroy(right);
     return NULL;
 }
 
@@ -186,6 +193,7 @@ List *merge(List *listLeft, List *listRight, List_compare cb) {
     check(List_count(listRight) >= 1, "Right list is null");
     
     // continues take the first element of each list and add to result
+    // NOTE: use just one while
     while (List_count(listLeft) > 0 && List_count(listRight) > 0) {
         if (cb(listLeft->first->value, listRight->first->value)  <= 0) {
             List_push(result, List_shift(listLeft));
