@@ -5,7 +5,7 @@
 void List_print(List *list) {
     if (list) {
         LIST_FOREACH(list, first, next, cur) {
-            printf("%s ", cur->value);
+            printf("%s ", (char *) cur->value);
         }
         printf("\n");
     } else {
@@ -161,28 +161,33 @@ List *List_merge_sort(List *list, List_compare cb) {
         element = getAt(list, i);
         check(element != NULL, "Value at index %d was not found", i);
         if (i < (list_size / 2)) {
-            List_push(left, element);
+            List_push(left, element->value);
         } else {
-            List_push(right, element);
+            List_push(right, element->value);
         }
     }
     // recursively sort the sublists
     left = List_merge_sort(left, cb);
-    right = List_merge_sort(left, cb);
+    right = List_merge_sort(right, cb);
     // join the two sorted sublists
     return merge(left, right, cb);
 
 error:
+    log_err("merge_sort fail");
+    List_destroy(left);
+    List_destroy(right);
     return NULL;
 }
 
 List *merge(List *listLeft, List *listRight, List_compare cb) {
-    check(listLeft != NULL, "Left list is null");
-    check(listRight != NULL, "Right list is null");
     List *result = List_create();
+    
+    check(List_count(listLeft) >= 1, "Left list is null");
+    check(List_count(listRight) >= 1, "Right list is null");
+    
     // continues take the first element of each list and add to result
     while (List_count(listLeft) > 0 && List_count(listRight) > 0) {
-        if (cb(List_first(listLeft), List_first(listRight))  <= 0) {
+        if (cb(listLeft->first->value, listRight->first->value)  <= 0) {
             List_push(result, List_shift(listLeft));
         } else {
             List_push(result, List_shift(listRight));
@@ -199,6 +204,9 @@ List *merge(List *listLeft, List *listRight, List_compare cb) {
     return result;
 
 error:
+    log_err("merge fail");
+    List_destroy(result);
     return NULL;
 }
 
+ 

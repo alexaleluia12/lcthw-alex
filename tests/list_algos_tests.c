@@ -40,7 +40,6 @@ char *test_bubble_sort()
     int rc = List_bubble_sort(words, (List_compare) strcmp);
     mu_assert(rc == 0, "Bubble sort failed.");
     mu_assert(is_sorted(words), "Words are not sorted after bubble sort.");
-    
     // should work on already sorted list
     rc = List_bubble_sort(words, (List_compare) strcmp);
     mu_assert(rc == 0, "Bubble sort of already sorted failed.");
@@ -63,13 +62,9 @@ char *test_bubble_sort()
 char *test_merge_sort()
 {
     List *words = create_words();
-    printf("before\n");
-    List_print(words);
     // should work on a list that needs sorting
     List *res = List_merge_sort(words, (List_compare) strcmp);
     mu_assert(is_sorted(res), "Words are not sorted after merge sort.");
-    printf("after\n");
-    List_print(res);
     
     List *res2 = List_merge_sort(res, (List_compare) strcmp);
     mu_assert(is_sorted(res2), "Should still be sorted after merge sort.");
