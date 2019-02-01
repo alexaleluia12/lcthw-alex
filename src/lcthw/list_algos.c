@@ -146,7 +146,8 @@ function merge(left, right)
 */
 
 
-List *List_merge_sort(List *list, List_compare cb) {
+List *List_merge_sort(List *list, List_compare cb) 
+{
     check(list != NULL, "The given list is null");
     int list_size = List_count(list);
     if (list_size <= 1) {
@@ -186,7 +187,8 @@ error:
     return NULL;
 }
 
-List *merge(List *listLeft, List *listRight, List_compare cb) {
+List *merge(List *listLeft, List *listRight, List_compare cb)
+{
     List *result = List_create();
     
     check(List_count(listLeft) >= 1, "Left list is null");
