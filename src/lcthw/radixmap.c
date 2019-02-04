@@ -49,7 +49,7 @@ static inline void radix_sort(short offset, uint64_t max,
     uint64_t c = 0;
     
     // count occurences of every byte value
-    for (scp = source, end = source + end; sp < end; sp++) {
+    for (sp = source, end = source + max; sp < end; sp++) {
         count[ByteOf(sp, offset)]++;
     }
     
@@ -65,7 +65,7 @@ static inline void radix_sort(short offset, uint64_t max,
     for (sp = source, end = source + max; sp < end; sp++) {
         cp = count + ByteOf(sp, offset);
         dest[*cp] = *sp;
-        ++(*cp)
+        ++(*cp);
     }
 }
 
@@ -82,5 +82,58 @@ void RadixMap_sort(RadixMap * map)
 
 RMElement *RadixMap_find(RadixMap * map, uint32_t to_find)
 {
-    //....pag 215
+    int low = 0;
+    int high = map->end - 1;
+    RMElement *data = map->contents;
+    
+    while (low <= high) {
+        int middle = low + (high - low) / 2;
+        uint32_t key = data[middle].data.key;
+        
+        if (to_find < key) {
+            high = middle - 1;
+        } else if (to_find > key) {
+            low = middle + 1;
+        } else {
+            return &data[middle];
+        }
+    }
+    
+    return NULL;
+}
+
+int RadixMap_add(RadixMap * map, uint32_t key, uint32_t value)
+{
+    check(key < UINT32_MAX, "key can't be equal to UINT32_MAX");
+    
+    RMElement element = {.data = {.key = key, .value = value}};
+    check(map->end + 1 < map->max, "RadixMap is full.");
+    
+    map->contents[map->end++] = element;
+    
+    RadixMap_sort(map);
+    
+    return 0;
+
+error:
+    return -1;
+}
+
+int RadixMap_delete(RadixMap * map, RMElement * el)
+{
+    check(map->end > 0, "There is nothing to delete.");
+    check(el != NULL, "Can't delete a NULL element.");
+    
+    el->data.key = UINT32_MAX;
+    
+    if (map->end > 1) {
+        // don't bother resorting a map of 1 length
+        RadixMap_sort(map);
+    }
+    
+    map->end--;
+    
+    return 0;
+error:
+    return 1;
 }
